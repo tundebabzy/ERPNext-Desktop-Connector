@@ -1,7 +1,33 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ERPNext_Desktop_Connector.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="PollingInterval" Type="System.String" Scope="User">
+      <Value Profile="(Default)">20</Value>
+    </Setting>
+    <Setting Name="SyncStartTime" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)">01/06/2021 17:00:00</Value>
+    </Setting>
+    <Setting Name="SyncStopTime" Type="System.DateTime" Scope="User">
+      <Value Profile="(Default)">01/06/2021 06:00:00</Value>
+    </Setting>
+    <Setting Name="AutomaticSync" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ManualSync" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ApplicationId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">41Dzi73wlWhIwx8yTdVQ6dJRbGU9nJtcu47x2rY4MOS7u9tAALysow==VK7xyIAjtHr7JDWfDXJYhVLelt+UlNwmGpSMCjISTVFfEo6e0pRzQR7cnDraS9HTpJnP34yIDrgC4nA7QU1rMCPWNQ4eOs+7+dm5AV/mymbQWUEx+tNEQhDka3PJi6nFXkZEaDa+I6bhbQnAAg+65ZD6/+IJ02CjaAGCAzaRiQebwojCJiKuSKoiDk/xkDTuD975uiTLcGZ3ZrzByxfoPdaUkAPQRTaEFmiARO/eBtNg7nSXUvVaEF0NddSjTyf6jbwycx6NnzmRWk/qBJPW0g==</Value>
+    </Setting>
+    <Setting Name="ServerAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://dev.electrocomptr.com</Value>
+    </Setting>
+    <Setting Name="ApiToken" Type="System.String" Scope="User">
+      <Value Profile="(Default)">4e7b90c8fc265ac</Value>
+    </Setting>
+    <Setting Name="SecretToken" Type="System.String" Scope="User">
+      <Value Profile="(Default)">78e5615db2830e3</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

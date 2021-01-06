@@ -15,6 +15,39 @@ namespace ERPNext_Desktop_Connector
         public SettingsForm()
         {
             InitializeComponent();
+            SetupEventHandlers();
+        }
+
+        private void SetupEventHandlers()
+        {
+            SetCancelButtonHandlers();
+            SetSaveButtonHandlers();
+        }
+
+        private void SetCancelButtonHandlers()
+        {
+            CancelButton.Click += CloseForm;
+        }
+
+        private void CloseForm(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void SetSaveButtonHandlers()
+        {
+            SaveButton.Click += SaveSettings;
+        }
+
+        private void SaveSettings(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Save();
+            Close();
+        }
+
+        private void SettingsForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
