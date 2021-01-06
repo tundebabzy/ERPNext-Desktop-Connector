@@ -33,18 +33,21 @@ namespace ERPNext_Desktop_Connector
         {
             syncButton.Enabled = true;
             stopButton.Enabled = false;
+            SettingsMenuItem.Enabled = true;
         }
 
         private void SetButtonsForStartState(object sender, EventArgs e)
         {
             syncButton.Enabled = false;
             stopButton.Enabled = true;
+            SettingsMenuItem.Enabled = false;
         }
 
         private void EnableButtons()
         {
             stopButton.Enabled = Started;
             syncButton.Enabled = !Started;
+            SettingsMenuItem.Enabled = !Started;
         }
 
         private void InitializeConnector()
@@ -87,12 +90,11 @@ namespace ERPNext_Desktop_Connector
 
         }
 
-        private void viewLogsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ViewLogsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using(var settingsForm = new SettingsForm())
             {
-                DialogResult result = settingsForm.ShowDialog();
-
+                settingsForm.ShowDialog();
             }
 
         }
