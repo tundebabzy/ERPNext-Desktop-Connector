@@ -14,7 +14,7 @@ namespace ERPNext_Desktop_Connector
     public class Connector
     {
         private const string CompanyName = "Electro-Comp Tape & Reel Services, LLC";
-        private const string ApplicationId = "41Dzi73wlWhIwx8yTdVQ6dJRbGU9nJtcu47x2rY4MOS7u9tAALysow==VK7xyIAjtHr7JDWfDXJYhVLelt+UlNwmGpSMCjISTVFfEo6e0pRzQR7cnDraS9HTpJnP34yIDrgC4nA7QU1rMCPWNQ4eOs+7+dm5AV/mymbQWUEx+tNEQhDka3PJi6nFXkZEaDa+I6bhbQnAAg+65ZD6/+IJ02CjaAGCAzaRiQebwojCJiKuSKoiDk/xkDTuD975uiTLcGZ3ZrzByxfoPdaUkAPQRTaEFmiARO/eBtNg7nSXUvVaEF0NddSjTyf6jbwycx6NnzmRWk/qBJPW0g==";
+        private string ApplicationId = Properties.Settings.Default.ApplicationId;
         private bool _canRequest = true;
         private Timer _timer;
         private ILogger Logger { get; set; }
