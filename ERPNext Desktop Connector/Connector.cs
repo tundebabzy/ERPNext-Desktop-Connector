@@ -143,8 +143,12 @@ namespace ERPNext_Desktop_Connector
             if (Session != null && Session.SessionActive)
             {
                 Session.End();
+                Session = null;
                 OnPeachtreeInformation(EventData("Sage 50 session ended"));
                 OnLoggedInStateChanged(EventData("Logged out"));
+            } else if (Session != null)
+            {
+                Session = null;
             }
         }
 
@@ -373,6 +377,7 @@ namespace ERPNext_Desktop_Connector
         {
             _timer?.Stop();
             _timer?.Close();
+            _timer = null;
             OnConnectorStopped(EventArgs.Empty);
             OnConnectorInformation(EventData("Connector has cleaned up its connection to Sage 50 and is now idling"));
         }
