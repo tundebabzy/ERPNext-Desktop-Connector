@@ -27,17 +27,20 @@ namespace ERPNext_Desktop_Connector
         public event EventHandler ConnectorStopped;
         public event EventHandler<EventDataArgs> PeachtreeInformation;
         public event EventHandler<EventDataArgs> ConnectorInformation;
+        public event EventHandler<EventDataArgs> LoggedInStateChange;
         private void OpenCompany(CompanyIdentifier companyId)
         {
             // Request authorization from Sage 50 for our third-party application.
             try
             {
                 OnPeachtreeInformation(EventData("Requesting access to your company in Sage 50..."));
-                var authorizationResult = Session.RequestAccess(companyId);
+                var presentAccessStatus = Session.VerifyAccess(companyId);
+                var authorizationResult = presentAccessStatus == AuthorizationResult.Granted ? presentAccessStatus : Session.RequestAccess(companyId);
 
                 // Check to see we were granted access to Sage 50 company, if so, go ahead and open the company.
                 if (authorizationResult == AuthorizationResult.Granted)
                 {
+                    OnLoggedInStateChanged(EventData("Logged in"));
                     Company = Session.Open(companyId);
                     Logger.Information("Authorization granted");
                     OnPeachtreeInformation(EventData("Access to your company was granted"));
@@ -46,7 +49,7 @@ namespace ERPNext_Desktop_Connector
                 else // otherwise, display a message to user that there was insufficient access.
                 {
                     Logger.Error("Authorization request was not successful - {0}. Will retry.", authorizationResult);
-                    OnPeachtreeInformation(EventData("Still waiting for authorization to access your company..."));
+                    OnPeachtreeInformation(EventData($"Authorization status is {authorizationResult}. Still waiting for authorization to access your company..."));
                 }
             }
             catch (Sage.Peachtree.API.Exceptions.LicenseNotAvailableException e)
@@ -102,7 +105,7 @@ namespace ERPNext_Desktop_Connector
 
                 // start the new session
                 Session.Begin(appKeyId);
-                OnPeachtreeInformation(EventData("Sage 50 session has started"));
+                OnPeachtreeInformation(EventData("Sage 50 session has started and will try to get authorization next"));
             }
             catch (Sage.Peachtree.API.Exceptions.ApplicationIdentifierExpiredException e)
             {
@@ -143,6 +146,7 @@ namespace ERPNext_Desktop_Connector
             {
                 Session.End();
                 OnPeachtreeInformation(EventData("Sage 50 session ended"));
+                OnLoggedInStateChanged(EventData("Logged out"));
             }
         }
 
@@ -168,6 +172,7 @@ namespace ERPNext_Desktop_Connector
             Logger.Information("Service started");
             Logger.Debug("State = {0}", _canRequest);
             OpenSession(ApplicationId);
+            DiscoverAndOpenCompany();
             StartTimer();
         }
 
@@ -189,7 +194,7 @@ namespace ERPNext_Desktop_Connector
         {
             _timer = new Timer
             {
-                Interval = Settings.TimerInterval
+                Interval = Convert.ToDouble(Properties.Settings.Default.PollingInterval) * 60000
             };
             _timer.Elapsed += OnTimer;
             _timer.Start();
@@ -206,11 +211,15 @@ namespace ERPNext_Desktop_Connector
          */
         private void OnTimer(object sender, ElapsedEventArgs e)
         {
+            var startTime = Properties.Settings.Default.SyncStartTime;
+            var endTime = Properties.Settings.Default.SyncStopTime;
+            var isAutoMode = Properties.Settings.Default.AutomaticSync;
+
             Logger.Information("Timer callback called");
-            if (!_canRequest || (DateTime.Now.Hour >= 6 && DateTime.Now.Hour <= 17))
+            if (!_canRequest || (isAutoMode && !IsWithinTheTimeRange(startTime, endTime)))
             {
                 Logger.Debug("Service cannot request: {0}, {1}", _canRequest, DateTime.Now.Hour);
-                var message = _canRequest ? "Connector is idling till 5pm" : "Connector is stopped";
+                var message = _canRequest ? $"Connector is idling till {startTime.ToShortTimeString()}" : "Connector is stopped";
                 OnConnectorInformation(EventData(message));
                 return;
             }
@@ -238,11 +247,28 @@ namespace ERPNext_Desktop_Connector
             }
             else
             {
-                OnConnectorInformation(EventData($"Session is initialized: {Session != null}; Session is active: {Session != null && Session.SessionActive}; Company is initialized: {Company != null}"));
                 Logger.Debug("Session is initialized: {0}", Session != null);
                 Logger.Debug("Session is active: {0}", Session != null && Session.SessionActive);
                 Logger.Debug("Company is initialized: {0}", Company != null);
             }
+        }
+
+        private bool IsWithinTheTimeRange(DateTime startTime, DateTime endTime)
+        {
+            var now = DateTime.Now;
+            if (endTime.Hour > now.Hour || now.Hour > startTime.Hour)
+            {
+                return true;
+            }
+            if (now.Hour == endTime.Hour && now.Minute <= endTime.Minute)
+            {
+                return true;
+            }
+            if (now.Hour == startTime.Hour && now.Minute >= startTime.Minute)
+            {
+                return true;
+            }
+            return false;
         }
 
         private void GetDocumentsThenProcessQueue()
@@ -254,9 +280,18 @@ namespace ERPNext_Desktop_Connector
         private CompanyIdentifier DiscoverCompany()
         {
             bool Predicate(CompanyIdentifier c) { return c.CompanyName == CompanyName; }
-            var companies = Session.CompanyList();
-            var company = companies.Find(Predicate);
-            return company;
+            try
+            {
+                var companies = Session.CompanyList();
+                var company = companies.Find(Predicate);
+                return company;
+            }
+            catch (Exception e)
+            {
+                CompanyIdentifier company = null;
+                OnPeachtreeInformation(EventData($"Something went wrong. {e.Message}."));
+                return company;
+            }
         }
 
         private void DiscoverAndOpenCompany()
@@ -277,9 +312,9 @@ namespace ERPNext_Desktop_Connector
          */
         private void GetDocuments()
         {
-            var purchaseOrderCommand = new PurchaseOrderCommand(serverUrl: $"{Settings.ServerUrl}/api/method/electro_erpnext.utilities.purchase_order.get_purchase_orders_for_sage");
-            var salesOrderCommand = new SalesOrderCommand(serverUrl: $"{Settings.ServerUrl}/api/method/electro_erpnext.utilities.sales_order.get_sales_orders_for_sage");
-            var salesInvoiceCommand = new SalesInvoiceCommand(serverUrl: $"{Settings.ServerUrl}/api/method/electro_erpnext.utilities.sales_invoice.get_sales_invoices_for_sage");
+            var purchaseOrderCommand = new PurchaseOrderCommand(serverUrl: $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.purchase_order.get_purchase_orders_for_sage");
+            var salesOrderCommand = new SalesOrderCommand(serverUrl: $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_order.get_sales_orders_for_sage");
+            var salesInvoiceCommand = new SalesInvoiceCommand(serverUrl: $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_invoice.get_sales_invoices_for_sage");
 
             var salesOrders = salesOrderCommand.Execute();
             OnConnectorInformation(EventData($"ERPNext sent {salesOrders?.Data.Message.Count} sales orders."));
@@ -363,6 +398,12 @@ namespace ERPNext_Desktop_Connector
         protected virtual void OnPeachtreeInformation(EventDataArgs e)
         {
             var eventHandler = PeachtreeInformation;
+            eventHandler?.Invoke(this, e);
+        }
+
+        protected virtual void OnLoggedInStateChanged(EventDataArgs e)
+        {
+            var eventHandler = LoggedInStateChange;
             eventHandler?.Invoke(this, e);
         }
     }
