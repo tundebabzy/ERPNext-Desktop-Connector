@@ -170,16 +170,6 @@ namespace ERPNext_Desktop_Connector
             StartTimer();
         }
 
-        private void CheckLoggedInStatus(CompanyIdentifier company)
-        {
-            // var company = DiscoverCompany();
-            if (company != null && Session != null && Session.SessionActive)
-            {
-                var status = Session.VerifyAccess(company);
-                OnLoggedInStateChanged(EventData($"{(status == AuthorizationResult.Granted ? "Logged In" : "Logged Out")}"));
-            }
-        }
-
         private void ClearQueue()
         {
             Logger.Information("Version {@Version}", Settings.Version);
