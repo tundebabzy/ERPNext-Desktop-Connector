@@ -259,10 +259,6 @@ namespace ERPNext_Desktop_Connector
         private bool IsWithinTheTimeRange(DateTime startTime, DateTime endTime)
         {
             var now = DateTime.Now;
-            if (endTime.Hour > now.Hour || now.Hour > startTime.Hour)
-            {
-                return true;
-            }
             if (now.Hour == endTime.Hour && now.Minute <= endTime.Minute)
             {
                 return true;
@@ -270,6 +266,14 @@ namespace ERPNext_Desktop_Connector
             if (now.Hour == startTime.Hour && now.Minute >= startTime.Minute)
             {
                 return true;
+            }
+            if (startTime.Hour < endTime.Hour)
+            {
+                return startTime.Hour < now.Hour && now.Hour < endTime.Hour;
+            }
+            if (startTime.Hour > endTime.Hour)
+            {
+                return startTime.Hour < now.Hour || now.Hour < endTime.Hour;
             }
             return false;
         }
