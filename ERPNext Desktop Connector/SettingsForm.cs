@@ -54,5 +54,16 @@ namespace ERPNext_Desktop_Connector
         {
 
         }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            ToggleTimePickerState(sender as CheckBox);
+        }
+
+        private void ToggleTimePickerState(CheckBox sender)
+        {
+            this.StartTimePicker.Enabled = sender.Checked;
+            this.EndTimePicker.Enabled = sender.Checked;
+        }
     }
 }

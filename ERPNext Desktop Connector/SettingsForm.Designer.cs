@@ -36,9 +36,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.EndTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.StartTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.PollingIntervalTextBox = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -110,9 +110,9 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.checkBox1);
-            this.groupBox2.Controls.Add(this.dateTimePicker2);
-            this.groupBox2.Controls.Add(this.dateTimePicker1);
-            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Controls.Add(this.EndTimePicker);
+            this.groupBox2.Controls.Add(this.StartTimePicker);
+            this.groupBox2.Controls.Add(this.PollingIntervalTextBox);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label6);
@@ -123,34 +123,34 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Connector Options";
             // 
-            // dateTimePicker2
+            // EndTimePicker
             // 
-            this.dateTimePicker2.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "SyncStopTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.dateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePicker2.Location = new System.Drawing.Point(152, 95);
-            this.dateTimePicker2.Name = "dateTimePicker2";
-            this.dateTimePicker2.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePicker2.TabIndex = 15;
-            this.dateTimePicker2.Value = global::ERPNext_Desktop_Connector.Properties.Settings.Default.SyncStopTime;
+            this.EndTimePicker.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "SyncStopTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.EndTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.EndTimePicker.Location = new System.Drawing.Point(152, 95);
+            this.EndTimePicker.Name = "EndTimePicker";
+            this.EndTimePicker.Size = new System.Drawing.Size(200, 20);
+            this.EndTimePicker.TabIndex = 15;
+            this.EndTimePicker.Value = global::ERPNext_Desktop_Connector.Properties.Settings.Default.SyncStopTime;
             // 
-            // dateTimePicker1
+            // StartTimePicker
             // 
-            this.dateTimePicker1.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "SyncStartTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePicker1.Location = new System.Drawing.Point(152, 60);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePicker1.TabIndex = 14;
-            this.dateTimePicker1.Value = global::ERPNext_Desktop_Connector.Properties.Settings.Default.SyncStartTime;
+            this.StartTimePicker.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "SyncStartTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.StartTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.StartTimePicker.Location = new System.Drawing.Point(152, 60);
+            this.StartTimePicker.Name = "StartTimePicker";
+            this.StartTimePicker.Size = new System.Drawing.Size(200, 20);
+            this.StartTimePicker.TabIndex = 14;
+            this.StartTimePicker.Value = global::ERPNext_Desktop_Connector.Properties.Settings.Default.SyncStartTime;
             // 
-            // textBox1
+            // PollingIntervalTextBox
             // 
-            this.textBox1.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "PollingInterval", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textBox1.Location = new System.Drawing.Point(152, 28);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 1;
-            this.textBox1.Text = global::ERPNext_Desktop_Connector.Properties.Settings.Default.PollingInterval;
+            this.PollingIntervalTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "PollingInterval", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.PollingIntervalTextBox.Location = new System.Drawing.Point(152, 28);
+            this.PollingIntervalTextBox.Name = "PollingIntervalTextBox";
+            this.PollingIntervalTextBox.Size = new System.Drawing.Size(100, 20);
+            this.PollingIntervalTextBox.TabIndex = 1;
+            this.PollingIntervalTextBox.Text = global::ERPNext_Desktop_Connector.Properties.Settings.Default.PollingInterval;
             // 
             // groupBox3
             // 
@@ -244,6 +244,7 @@
             this.checkBox1.TabIndex = 17;
             this.checkBox1.Text = "Automatic Synchronizatioin";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // SettingsForm
             // 
@@ -268,7 +269,7 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox PollingIntervalTextBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
@@ -278,8 +279,8 @@
         private System.Windows.Forms.TextBox textBox9;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.DateTimePicker dateTimePicker2;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker EndTimePicker;
+        private System.Windows.Forms.DateTimePicker StartTimePicker;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button SaveButton;
