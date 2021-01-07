@@ -155,7 +155,7 @@
             this.Controls.Add(this.syncButton);
             this.Controls.Add(this.menuStrip);
             this.Name = "Main";
-            this.Text = "Form1";
+            this.Text = "ERPNext Connector";
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);
