@@ -55,6 +55,7 @@ namespace ERPNext_Desktop_Connector
             syncButton.Enabled = true;
             stopButton.Enabled = false;
             SettingsMenuItem.Enabled = true;
+            ExitMenuItem.Enabled = true;
         }
 
         private void SetButtonsForStartState(object sender, EventArgs e)
@@ -62,6 +63,7 @@ namespace ERPNext_Desktop_Connector
             syncButton.Enabled = false;
             stopButton.Enabled = true;
             SettingsMenuItem.Enabled = false;
+            ExitMenuItem.Enabled = false;
         }
 
         private void EnableButtons()
