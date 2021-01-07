@@ -99,26 +99,31 @@ namespace ERPNext_Desktop_Connector
                 // start the new session
                 Session.Begin(appKeyId);
                 OnPeachtreeInformation(EventData("Sage 50 session has started and will try to get authorization next"));
+                OnLoggedInStateChanged(EventData("Log in not yet confirmed"));
             }
             catch (Sage.Peachtree.API.Exceptions.ApplicationIdentifierExpiredException e)
             {
                 Logger.Debug(e, "Your application identifier has expired.");
                 OnPeachtreeInformation(EventData("Your application identifier has expired"));
+                OnLoggedInStateChanged(EventData("Logged Out"));
             }
             catch (Sage.Peachtree.API.Exceptions.ApplicationIdentifierRejectedException e)
             {
                 Logger.Debug(e, "Your application identifier was rejected.");
                 OnPeachtreeInformation(EventData("Your application identifier was rejected."));
+                OnLoggedInStateChanged(EventData("Logged Out"));
             }
             catch (Sage.Peachtree.API.Exceptions.PeachtreeException e)
             {
                 Logger.Debug(e, e.Message);
                 OnPeachtreeInformation(EventData(e.Message));
+                OnLoggedInStateChanged(EventData("Logged Out"));
             }
             catch (Exception e)
             {
                 Logger.Debug(e, e.Message);
                 OnPeachtreeInformation(EventData(e.Message));
+                OnLoggedInStateChanged(EventData("Logged Out"));
             }
         }
 
