@@ -94,8 +94,8 @@ namespace ERPNext_Desktop_Connector
         {
             using(var settingsForm = new SettingsForm())
             {
-                settingsForm.ShowDialog();
                 settingsForm.FormClosing += SaveApplicationSettings;
+                settingsForm.ShowDialog();
             }
 
         }
