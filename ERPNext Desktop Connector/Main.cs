@@ -9,7 +9,7 @@ namespace ERPNext_Desktop_Connector
         private Connector Connector;
         private bool Started = false;
         // https://docs.microsoft.com/en-us/dotnet/desktop/winforms/controls/how-to-make-thread-safe-calls-to-windows-forms-controls?view=netframeworkdesktop-4.8
-        private delegate void SafeCallDelegate(string text);
+        private delegate void ThreadSafeDelegate(string text);
         public Main()
         {
             InitializeComponent();
@@ -36,7 +36,7 @@ namespace ERPNext_Desktop_Connector
         {
             if (InformationLabel.InvokeRequired)
             {
-                var del = new SafeCallDelegate(ChangeInformationText);
+                var del = new ThreadSafeDelegate(ChangeInformationText);
                 InformationLabel.Invoke(del, new object[] { text });
             } else
             {
