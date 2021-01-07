@@ -29,7 +29,11 @@ namespace ERPNext_Desktop_Connector.Handlers
         {
             var customerDocument = GetCustomerFromErpNext(document.CustomerName);
             var salesInvoice = Company.Factories.SalesInvoiceFactory.Create();
-            var customerEntityReference = GetCustomerEntityReference(customerDocument?.OldCustomerId);
+            EntityReference<Customer> customerEntityReference = null;
+            if (customerDocument != null && customerDocument.OldCustomerId != null)
+            {
+                customerEntityReference = GetCustomerEntityReference(customerDocument.OldCustomerId);
+            }
             if (customerEntityReference == null)
             {
                 Logger.Debug("Customer {@name} in {@Document} was not found in Sage.", document.Customer,
@@ -37,8 +41,9 @@ namespace ERPNext_Desktop_Connector.Handlers
                 salesInvoice = null;
                 SetNext(new CreateCustomerHandler(Company, Logger, EmployeeInformation));
                 Logger.Debug("Customer {@name} has been queued for creation in Sage", document.Customer);
+                return salesInvoice;
             }
-            else if (salesInvoice == null) return null;
+            
             salesInvoice = _createNewSalesInvoice(document, salesInvoice, customerEntityReference);
             return salesInvoice;
         }

@@ -28,7 +28,11 @@ namespace ERPNext_Desktop_Connector.Handlers
         {
             var customerDocument = GetCustomerFromErpNext(document.CustomerName);
             var salesOrder = Company.Factories.SalesOrderFactory.Create();
-            var customerEntityReference = GetCustomerEntityReference(customerDocument?.OldCustomerId);
+            EntityReference<Customer> customerEntityReference = null;
+            if (customerDocument != null && customerDocument.OldCustomerId != null)
+            {
+                customerEntityReference = GetCustomerEntityReference(customerDocument.OldCustomerId);
+            }
             if (customerEntityReference == null)
             {
                 Logger.Debug("Customer {@name} in {@Document} was not found in Sage.", document.Customer, document.Name);
