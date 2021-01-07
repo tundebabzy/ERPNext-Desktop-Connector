@@ -8,7 +8,7 @@ namespace ERPNext_Desktop_Connector.Handlers
 {
     internal class LogPurchaseOrderHandler: AbstractDocumentHandler
     {
-        public LogPurchaseOrderHandler(Company c, ILogger logger, EmployeeInformation employeeInformation) : base(c, logger, employeeInformation)
+        public LogPurchaseOrderHandler(Company c, ILogger logger) : base(c, logger)
         {
         }
 

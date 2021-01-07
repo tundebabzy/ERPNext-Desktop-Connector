@@ -10,7 +10,7 @@ namespace ERPNext_Desktop_Connector.Handlers
 {
     internal class CreateSalesOrderHandler: AbstractDocumentHandler
     {
-        public CreateSalesOrderHandler(Company c, ILogger logger, EmployeeInformation employeeInformation = null) : base(c, logger, employeeInformation) { }
+        public CreateSalesOrderHandler(Company c, ILogger logger) : base(c, logger) { }
 
 
         public override object Handle(object request)
@@ -19,7 +19,7 @@ namespace ERPNext_Desktop_Connector.Handlers
             var salesOrder = CreateNewSalesOrder(request as SalesOrderDocument);
             if (GetNext() == null)
             {
-                this.SetNext(salesOrder != null ? new LogSalesOrderHandler(Company, Logger, EmployeeInformation) : null);
+                this.SetNext(salesOrder != null ? new LogSalesOrderHandler(Company, Logger) : null);
             }
             return base.Handle(request);
         }
@@ -37,7 +37,7 @@ namespace ERPNext_Desktop_Connector.Handlers
             {
                 Logger.Debug("Customer {@name} in {@Document} was not found in Sage.", document.Customer, document.Name);
                 salesOrder = null;
-                SetNext(new CreateCustomerHandler(Company, Logger, EmployeeInformation));
+                SetNext(new CreateCustomerHandler(Company, Logger));
                 Logger.Debug("Customer {@name} has been queued for creation in Sage", document.Customer);
             }
             else if (salesOrder != null)
@@ -122,7 +122,7 @@ namespace ERPNext_Desktop_Connector.Handlers
         private void AddSalesRep(SalesOrder salesOrder, SalesOrderDocument document)
         {
             if (document.SalesRep == null) return;
-            var salesRep = EmployeeInformation.Data[document.SalesRep];
+            var salesRep = GetSalesRepEntityReference(document.SalesRep);
             salesOrder.SalesRepresentativeReference = salesRep;
         }
 

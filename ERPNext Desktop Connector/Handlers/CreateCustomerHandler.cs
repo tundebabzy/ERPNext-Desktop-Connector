@@ -12,7 +12,7 @@ namespace ERPNext_Desktop_Connector.Handlers
     internal class CreateCustomerHandler: AbstractDocumentHandler, IResourceAddress
     {
         protected string CustomerName { get; set; }
-        public CreateCustomerHandler(Company company, ILogger logger, EmployeeInformation employeeInformation) : base(company, logger, employeeInformation) { }
+        public CreateCustomerHandler(Company company, ILogger logger) : base(company, logger) { }
 
         public override object Handle(object request)
         {
@@ -20,7 +20,7 @@ namespace ERPNext_Desktop_Connector.Handlers
             var customerName = (request as SalesOrderDocument)?.Customer;
             var customerDocument = customerName != null ? GetCustomerDetails(customerName) : null;
             var customer = customerDocument != null ? CreateNewCustomer(customerDocument) : null;
-            this.SetNext(customer != null ? new LogCustomerCreatedHandler(Company, Logger, EmployeeInformation) : null);
+            this.SetNext(customer != null ? new LogCustomerCreatedHandler(Company, Logger) : null);
             return base.Handle(customerDocument);
         }
 

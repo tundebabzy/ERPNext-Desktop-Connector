@@ -1,7 +1,6 @@
 ﻿using ERPNext_Desktop_Connector.Commands;
 using ERPNext_Desktop_Connector.Interfaces;
 using ERPNext_Desktop_Connector.Objects;
-using ERPNext_Desktop_Connector.Options;
 using Sage.Peachtree.API;
 using Sage.Peachtree.API.Collections.Generic;
 using Serilog;
@@ -23,15 +22,6 @@ namespace ERPNext_Desktop_Connector.Handlers
 
         protected Dictionary<string, EntityReference<Vendor>> VendorReferences { get; set; }
 
-        protected EmployeeInformation EmployeeInformation { get; set; }
-
-
-        protected AbstractDocumentHandler(Company c, ILogger logger, EmployeeInformation employeeInformation)
-        {
-            Company = c;
-            Logger = logger;
-            EmployeeInformation = employeeInformation;
-        }
 
         protected AbstractDocumentHandler(Company c, ILogger logger)
         {
@@ -109,6 +99,24 @@ namespace ERPNext_Desktop_Connector.Handlers
             catch (Exception e)
             {
                 Logger.Debug($"Could not get customer entity reference. @{e.Message}");
+                return null;
+            }
+        }
+
+        protected EntityReference<Employee> GetSalesRepEntityReference(string employeeName)
+        {
+            try
+            {
+                var employeeList = Company.Factories.EmployeeFactory.List();
+                var filter = GetPropertyContainsLoadModifiers("Employee.ID", employeeName);
+                employeeList.Load(filter);
+
+                var entity = employeeList.FirstOrDefault((employee => employee.Name == employeeName));
+                return entity?.Key;
+            }
+            catch (Exception e)
+            {
+                Logger.Debug($"Could not get employee entity reference. @{e.Message}");
                 return null;
             }
         }

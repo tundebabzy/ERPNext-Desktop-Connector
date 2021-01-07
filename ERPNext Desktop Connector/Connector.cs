@@ -21,7 +21,6 @@ namespace ERPNext_Desktop_Connector
         private static PeachtreeSession Session { get; set; }
         public static Company Company { get; set; }
         public ConcurrentQueue<object> Queue = new ConcurrentQueue<object>();
-        private EmployeeInformation EmployeeInformation { get; } = new EmployeeInformation();
 
         public event EventHandler ConnectorStarted;
         public event EventHandler ConnectorStopped;
@@ -40,16 +39,16 @@ namespace ERPNext_Desktop_Connector
                 // Check to see we were granted access to Sage 50 company, if so, go ahead and open the company.
                 if (authorizationResult == AuthorizationResult.Granted)
                 {
-                    OnLoggedInStateChanged(EventData("Logged in"));
                     Company = Session.Open(companyId);
                     Logger.Information("Authorization granted");
                     OnPeachtreeInformation(EventData("Access to your company was granted"));
-                    InitSalesRepresentativeList();
+                    OnLoggedInStateChanged(EventData("Logged In"));
                 }
                 else // otherwise, display a message to user that there was insufficient access.
                 {
                     Logger.Error("Authorization request was not successful - {0}. Will retry.", authorizationResult);
                     OnPeachtreeInformation(EventData($"Authorization status is {authorizationResult}. Still waiting for authorization to access your company..."));
+                    OnLoggedInStateChanged(EventData("Logged Out. Waiting for Sage 50 authorization"));
                 }
             }
             catch (Sage.Peachtree.API.Exceptions.LicenseNotAvailableException e)
@@ -77,12 +76,6 @@ namespace ERPNext_Desktop_Connector
                 Logger.Debug(e, e.Message);
                 OnPeachtreeInformation(EventData($"Something went wrong. {e.Message}"));
             }
-        }
-
-        private void InitSalesRepresentativeList()
-        {
-            EmployeeInformation.Logger = Logger;
-            EmployeeInformation.Load(Company);
         }
 
         private void CloseCompany()
@@ -173,14 +166,25 @@ namespace ERPNext_Desktop_Connector
             Logger.Debug("State = {0}", _canRequest);
             OpenSession(ApplicationId);
             DiscoverAndOpenCompany();
+            // CheckLoggedInStatus();
             StartTimer();
+        }
+
+        private void CheckLoggedInStatus(CompanyIdentifier company)
+        {
+            // var company = DiscoverCompany();
+            if (company != null && Session != null && Session.SessionActive)
+            {
+                var status = Session.VerifyAccess(company);
+                OnLoggedInStateChanged(EventData($"{(status == AuthorizationResult.Granted ? "Logged In" : "Logged Out")}"));
+            }
         }
 
         private void ClearQueue()
         {
             Logger.Information("Version {@Version}", Settings.Version);
             if (Queue.IsEmpty || Company == null || Company.IsClosed) return;
-            var handler = new DocumentTypeHandler(Company, Logger, EmployeeInformation);
+            var handler = new DocumentTypeHandler(Company, Logger);
             while (Queue.TryDequeue(out var document) && Session.SessionActive)
             {
                 handler.Handle(document);
@@ -300,6 +304,7 @@ namespace ERPNext_Desktop_Connector
             if (company != null)
             {
                 OpenCompany(company);
+                // CheckLoggedInStatus(company);
             } else
             {
                 OnPeachtreeInformation(EventData("No company was found."));

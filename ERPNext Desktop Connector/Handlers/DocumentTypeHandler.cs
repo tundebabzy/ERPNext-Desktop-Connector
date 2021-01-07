@@ -6,12 +6,12 @@ namespace ERPNext_Desktop_Connector.Handlers
 {
     class DocumentTypeHandler: AbstractDocumentHandler
     {
-        public DocumentTypeHandler(Company c, ILogger logger, EmployeeInformation employeeInformation) : base(c, logger, employeeInformation) { }
+        public DocumentTypeHandler(Company c, ILogger logger) : base(c, logger) { }
         public override object Handle(object request)
         {
             if ((request as SalesOrderDocument) != null && (request as SalesOrderDocument).Doctype == "Sales Order")
             {
-                SetNext(new CreateSalesOrderHandler(Company, Logger, EmployeeInformation));
+                SetNext(new CreateSalesOrderHandler(Company, Logger));
             }
             else if ((request as PurchaseOrderDocument) != null && (request as PurchaseOrderDocument).Doctype == "Purchase Order")
             {
@@ -19,7 +19,7 @@ namespace ERPNext_Desktop_Connector.Handlers
             }
             else if ((request as SalesInvoiceDocument) != null && (request as SalesInvoiceDocument).Doctype == "Sales Invoice")
             {
-                SetNext(new CreateSalesInvoiceHandler(Company, Logger, EmployeeInformation));
+                SetNext(new CreateSalesInvoiceHandler(Company, Logger));
             }
             else
             {

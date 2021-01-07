@@ -12,8 +12,7 @@ namespace ERPNext_Desktop_Connector.Handlers
 {
     internal class CreateSalesInvoiceHandler: AbstractDocumentHandler
     {
-        public CreateSalesInvoiceHandler(Company company, ILogger logger,
-            EmployeeInformation employeeInformation = null) : base(company, logger, employeeInformation)
+        public CreateSalesInvoiceHandler(Company company, ILogger logger) : base(company, logger)
         {
         }
 
@@ -21,7 +20,7 @@ namespace ERPNext_Desktop_Connector.Handlers
         {
             Logger.Information("Version {@Version}", Settings.Version);
             var salesInvoice = CreateNewSalesInvoice(request as SalesInvoiceDocument);
-            SetNext(salesInvoice != null ? new LogSalesInvoiceHandler(Company, Logger, EmployeeInformation) : null);
+            SetNext(salesInvoice != null ? new LogSalesInvoiceHandler(Company, Logger) : null);
             return base.Handle(request);
         }
 
@@ -39,7 +38,7 @@ namespace ERPNext_Desktop_Connector.Handlers
                 Logger.Debug("Customer {@name} in {@Document} was not found in Sage.", document.Customer,
                     document.Name);
                 salesInvoice = null;
-                SetNext(new CreateCustomerHandler(Company, Logger, EmployeeInformation));
+                SetNext(new CreateCustomerHandler(Company, Logger));
                 Logger.Debug("Customer {@name} has been queued for creation in Sage", document.Customer);
                 return salesInvoice;
             }
@@ -156,7 +155,7 @@ namespace ERPNext_Desktop_Connector.Handlers
         private void AddSalesRep(SalesInvoice salesInvoice, SalesInvoiceDocument document)
         {
             if (document.SalesRep == null) return;
-            var salesRep = EmployeeInformation.Data[document.SalesRep];
+            var salesRep = GetSalesRepEntityReference(document.SalesRep);
             salesInvoice.SalesRepresentativeReference = salesRep;
         }
 
