@@ -75,7 +75,7 @@ namespace ERPNext_Desktop_Connector.Handlers
 
         private static string GetCustomerResourceServerAddress()
         {
-            return $"{Settings.ServerUrl}/api/method/electro_erpnext.utilities.customer.get_customer_details";
+            return $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.customer.get_customer_details";
         }
 
         protected EntityReference GetItemEntityReference(string itemCode)
@@ -115,7 +115,7 @@ namespace ERPNext_Desktop_Connector.Handlers
 
         private static string GetSupplierResourceServerAddress()
         {
-            return $"{Settings.ServerUrl}/api/method/electro_erpnext.utilities.supplier.get_supplier_details";
+            return $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.supplier.get_supplier_details";
         }
 
         protected EntityReference<Vendor> GetVendorEntityReference(string vendorId)

@@ -20,7 +20,7 @@ namespace ERPNext_Desktop_Connector.Handlers
 
         private void LogPurchaseOrder(PurchaseOrderDocument document)
         {
-            var url = $"{Settings.ServerUrl}/api/resource/Sage 50 Export Log";
+            var url = $"{Properties.Settings.Default.ServerAddress}/api/resource/Sage 50 Export Log";
             var resource = new Resource(url);
             resource.LogPurchaseOrder(document);
         }

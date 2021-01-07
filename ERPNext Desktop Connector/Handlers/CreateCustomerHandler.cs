@@ -218,7 +218,7 @@ namespace ERPNext_Desktop_Connector.Handlers
 
         public string GetResourceServerAddress()
         {
-            return $"{Settings.ServerUrl}/api/method/electro_erpnext.utilities.customer.get_customer_details";
+            return $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.customer.get_customer_details";
         }
     }
 }

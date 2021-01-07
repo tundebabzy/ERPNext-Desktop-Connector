@@ -19,7 +19,7 @@ namespace ERPNext_Desktop_Connector.Handlers
 
         private void LogSupplier(SupplierDocument supplierDocument)
         {
-            var url = $"{Settings.ServerUrl}/api/resource/Sage 50 Export Log";
+            var url = $"{Properties.Settings.Default.ServerAddress}/api/resource/Sage 50 Export Log";
             var resource = new Resource(url);
             resource.LogSupplier(supplierDocument);
         }
