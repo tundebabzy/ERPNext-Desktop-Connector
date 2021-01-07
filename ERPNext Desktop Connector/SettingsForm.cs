@@ -21,7 +21,6 @@ namespace ERPNext_Desktop_Connector
         private void SetupEventHandlers()
         {
             SetCancelButtonHandlers();
-            SetSaveButtonHandlers();
         }
 
         private void SetCancelButtonHandlers()
@@ -32,11 +31,6 @@ namespace ERPNext_Desktop_Connector
         private void CloseForm(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private void SetSaveButtonHandlers()
-        {
-            SaveButton.Click += SaveSettings;
         }
 
         private void SaveSettings(object sender, EventArgs e)
@@ -64,6 +58,15 @@ namespace ERPNext_Desktop_Connector
         {
             this.StartTimePicker.Enabled = sender.Checked;
             this.EndTimePicker.Enabled = sender.Checked;
+        }
+
+        private void EditButton_Click(object sender, EventArgs e)
+        {
+            TokenText.Enabled = true;
+            SecretText.Enabled = true;
+            ServerUrlText.Enabled = true;
+            AppIdText.Enabled = true;
+            EditButton.Enabled = false;
         }
     }
 }

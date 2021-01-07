@@ -40,12 +40,12 @@
             this.StartTimePicker = new System.Windows.Forms.DateTimePicker();
             this.PollingIntervalTextBox = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.TokenText = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.SaveButton = new System.Windows.Forms.Button();
+            this.AppIdText = new System.Windows.Forms.TextBox();
+            this.ServerUrlText = new System.Windows.Forms.TextBox();
+            this.SecretText = new System.Windows.Forms.TextBox();
+            this.EditButton = new System.Windows.Forms.Button();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.CancelButton = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
@@ -118,7 +118,7 @@
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Location = new System.Drawing.Point(13, 13);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(376, 196);
+            this.groupBox2.Size = new System.Drawing.Size(376, 229);
             this.groupBox2.TabIndex = 18;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Connector Options";
@@ -154,29 +154,31 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.textBox2);
+            this.groupBox3.Controls.Add(this.TokenText);
+            this.groupBox3.Controls.Add(this.EditButton);
             this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Controls.Add(this.textBox3);
+            this.groupBox3.Controls.Add(this.AppIdText);
             this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.textBox9);
-            this.groupBox3.Controls.Add(this.textBox5);
+            this.groupBox3.Controls.Add(this.ServerUrlText);
+            this.groupBox3.Controls.Add(this.SecretText);
             this.groupBox3.Location = new System.Drawing.Point(395, 13);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(393, 196);
+            this.groupBox3.Size = new System.Drawing.Size(393, 229);
             this.groupBox3.TabIndex = 19;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Advanced";
             // 
-            // textBox2
+            // TokenText
             // 
-            this.textBox2.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "ApiToken", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textBox2.Location = new System.Drawing.Point(126, 142);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(249, 20);
-            this.textBox2.TabIndex = 18;
-            this.textBox2.Text = global::ERPNext_Desktop_Connector.Properties.Settings.Default.ApiToken;
+            this.TokenText.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "ApiToken", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.TokenText.Enabled = false;
+            this.TokenText.Location = new System.Drawing.Point(126, 142);
+            this.TokenText.Name = "TokenText";
+            this.TokenText.Size = new System.Drawing.Size(249, 20);
+            this.TokenText.TabIndex = 18;
+            this.TokenText.Text = global::ERPNext_Desktop_Connector.Properties.Settings.Default.ApiToken;
             // 
             // label3
             // 
@@ -187,41 +189,45 @@
             this.label3.TabIndex = 17;
             this.label3.Text = "Token";
             // 
-            // textBox3
+            // AppIdText
             // 
-            this.textBox3.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "ApplicationId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textBox3.Location = new System.Drawing.Point(126, 28);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(249, 20);
-            this.textBox3.TabIndex = 16;
-            this.textBox3.Text = global::ERPNext_Desktop_Connector.Properties.Settings.Default.ApplicationId;
+            this.AppIdText.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "ApplicationId", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.AppIdText.Enabled = false;
+            this.AppIdText.Location = new System.Drawing.Point(126, 28);
+            this.AppIdText.Name = "AppIdText";
+            this.AppIdText.Size = new System.Drawing.Size(249, 20);
+            this.AppIdText.TabIndex = 16;
+            this.AppIdText.Text = global::ERPNext_Desktop_Connector.Properties.Settings.Default.ApplicationId;
             // 
-            // textBox9
+            // ServerUrlText
             // 
-            this.textBox9.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "ServerAddress", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textBox9.Location = new System.Drawing.Point(126, 67);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(249, 20);
-            this.textBox9.TabIndex = 15;
-            this.textBox9.Text = global::ERPNext_Desktop_Connector.Properties.Settings.Default.ServerAddress;
+            this.ServerUrlText.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "ServerAddress", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.ServerUrlText.Enabled = false;
+            this.ServerUrlText.Location = new System.Drawing.Point(126, 67);
+            this.ServerUrlText.Name = "ServerUrlText";
+            this.ServerUrlText.Size = new System.Drawing.Size(249, 20);
+            this.ServerUrlText.TabIndex = 15;
+            this.ServerUrlText.Text = global::ERPNext_Desktop_Connector.Properties.Settings.Default.ServerAddress;
             // 
-            // textBox5
+            // SecretText
             // 
-            this.textBox5.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "SecretToken", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.textBox5.Location = new System.Drawing.Point(126, 109);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(249, 20);
-            this.textBox5.TabIndex = 11;
-            this.textBox5.Text = global::ERPNext_Desktop_Connector.Properties.Settings.Default.SecretToken;
+            this.SecretText.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "SecretToken", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.SecretText.Enabled = false;
+            this.SecretText.Location = new System.Drawing.Point(126, 109);
+            this.SecretText.Name = "SecretText";
+            this.SecretText.Size = new System.Drawing.Size(249, 20);
+            this.SecretText.TabIndex = 11;
+            this.SecretText.Text = global::ERPNext_Desktop_Connector.Properties.Settings.Default.SecretToken;
             // 
-            // SaveButton
+            // EditButton
             // 
-            this.SaveButton.Location = new System.Drawing.Point(13, 251);
-            this.SaveButton.Name = "SaveButton";
-            this.SaveButton.Size = new System.Drawing.Size(75, 23);
-            this.SaveButton.TabIndex = 20;
-            this.SaveButton.Text = "Save";
-            this.SaveButton.UseVisualStyleBackColor = true;
+            this.EditButton.Location = new System.Drawing.Point(126, 200);
+            this.EditButton.Name = "EditButton";
+            this.EditButton.Size = new System.Drawing.Size(75, 23);
+            this.EditButton.TabIndex = 20;
+            this.EditButton.Text = "Edit";
+            this.EditButton.UseVisualStyleBackColor = true;
+            this.EditButton.Click += new System.EventHandler(this.EditButton_Click);
             // 
             // CancelButton
             // 
@@ -252,7 +258,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 295);
             this.Controls.Add(this.CancelButton);
-            this.Controls.Add(this.SaveButton);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Name = "SettingsForm";
@@ -275,17 +280,17 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox9;
+        private System.Windows.Forms.TextBox SecretText;
+        private System.Windows.Forms.TextBox ServerUrlText;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.DateTimePicker EndTimePicker;
         private System.Windows.Forms.DateTimePicker StartTimePicker;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.Button SaveButton;
+        private System.Windows.Forms.TextBox AppIdText;
+        private System.Windows.Forms.Button EditButton;
         private System.ComponentModel.BackgroundWorker backgroundWorker2;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox TokenText;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.CheckBox checkBox1;
