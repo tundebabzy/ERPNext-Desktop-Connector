@@ -20,12 +20,6 @@ namespace ERPNext_Desktop_Connector
 
         private void SetupEventHandlers()
         {
-            SetCancelButtonHandlers();
-        }
-
-        private void SetCancelButtonHandlers()
-        {
-            CancelButton.Click += CloseForm;
         }
 
         private void CloseForm(object sender, EventArgs e)
@@ -44,12 +38,7 @@ namespace ERPNext_Desktop_Connector
 
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void CheckBox1_CheckedChanged(object sender, EventArgs e)
         {
             ToggleTimePickerState(sender as CheckBox);
         }
