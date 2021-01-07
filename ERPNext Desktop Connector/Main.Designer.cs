@@ -37,7 +37,7 @@
             this.aboutMeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncButton = new System.Windows.Forms.Button();
             this.stopButton = new System.Windows.Forms.Button();
-            this.generalStateLabel = new System.Windows.Forms.Label();
+            this.InformationLabel = new System.Windows.Forms.Label();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
@@ -78,7 +78,6 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.exitToolStripMenuItem.Text = "View Logs";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem1
             // 
@@ -108,7 +107,7 @@
             this.syncButton.TabIndex = 1;
             this.syncButton.Text = "Sync";
             this.syncButton.UseVisualStyleBackColor = true;
-            this.syncButton.Click += new System.EventHandler(this.syncButton_Click);
+            this.syncButton.Click += new System.EventHandler(this.SyncButton_Click);
             // 
             // stopButton
             // 
@@ -118,17 +117,16 @@
             this.stopButton.TabIndex = 2;
             this.stopButton.Text = "Stop";
             this.stopButton.UseVisualStyleBackColor = true;
-            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
+            this.stopButton.Click += new System.EventHandler(this.StopButton_Click);
             // 
-            // generalStateLabel
+            // InformationLabel
             // 
-            this.generalStateLabel.AutoSize = true;
-            this.generalStateLabel.Location = new System.Drawing.Point(11, 86);
-            this.generalStateLabel.Name = "generalStateLabel";
-            this.generalStateLabel.Size = new System.Drawing.Size(181, 13);
-            this.generalStateLabel.TabIndex = 4;
-            this.generalStateLabel.Text = "Automatic synchronization is ongoing";
-            this.generalStateLabel.Click += new System.EventHandler(this.generalStateLabel_Click);
+            this.InformationLabel.AutoEllipsis = true;
+            this.InformationLabel.AutoSize = true;
+            this.InformationLabel.Location = new System.Drawing.Point(11, 86);
+            this.InformationLabel.Name = "InformationLabel";
+            this.InformationLabel.Size = new System.Drawing.Size(0, 13);
+            this.InformationLabel.TabIndex = 4;
             // 
             // statusStrip
             // 
@@ -142,6 +140,7 @@
             // 
             // toolStripStatusLabel
             // 
+            this.toolStripStatusLabel.AutoToolTip = true;
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
             this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
             // 
@@ -151,13 +150,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(373, 153);
             this.Controls.Add(this.statusStrip);
-            this.Controls.Add(this.generalStateLabel);
+            this.Controls.Add(this.InformationLabel);
             this.Controls.Add(this.stopButton);
             this.Controls.Add(this.syncButton);
             this.Controls.Add(this.menuStrip);
             this.Name = "Main";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Main_Load);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);
@@ -177,7 +175,7 @@
         private System.Windows.Forms.ToolStripMenuItem aboutMeToolStripMenuItem;
         private System.Windows.Forms.Button syncButton;
         private System.Windows.Forms.Button stopButton;
-        private System.Windows.Forms.Label generalStateLabel;
+        private System.Windows.Forms.Label InformationLabel;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem1;

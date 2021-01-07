@@ -8,6 +8,8 @@ namespace ERPNext_Desktop_Connector
     {
         private Connector Connector;
         private bool Started = false;
+        // https://docs.microsoft.com/en-us/dotnet/desktop/winforms/controls/how-to-make-thread-safe-calls-to-windows-forms-controls?view=netframeworkdesktop-4.8
+        private delegate void SafeCallDelegate(string text);
         public Main()
         {
             InitializeComponent();
@@ -22,6 +24,24 @@ namespace ERPNext_Desktop_Connector
             Connector.ConnectorStopped += SetButtonsForStopState;
             Connector.ConnectorInformation += ChangeStatus;
             Connector.PeachtreeInformation += ChangeStatus;
+            Connector.LoggedInStateChange += ChangeLoggedInStatus;
+        }
+
+        private void ChangeLoggedInStatus(object sender, EventDataArgs e)
+        {
+            ChangeInformationText(e.Text);
+        }
+
+        private void ChangeInformationText(string text)
+        {
+            if (InformationLabel.InvokeRequired)
+            {
+                var del = new SafeCallDelegate(ChangeInformationText);
+                InformationLabel.Invoke(del, new object[] { text });
+            } else
+            {
+                InformationLabel.Text = text;
+            }
         }
 
         private void ChangeStatus(object sender, EventDataArgs e)
@@ -55,39 +75,14 @@ namespace ERPNext_Desktop_Connector
             Connector = new Connector();
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void syncButton_Click(object sender, EventArgs e)
+        private void SyncButton_Click(object sender, EventArgs e)
         {
             Connector.OnStart();
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void stopButton_Click(object sender, EventArgs e)
+        private void StopButton_Click(object sender, EventArgs e)
         {
             Connector.OnStop();
-        }
-
-        private void generalStateLabel_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Main_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void ViewLogsToolStripMenuItem_Click(object sender, EventArgs e)
