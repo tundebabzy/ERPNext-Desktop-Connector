@@ -160,6 +160,7 @@
             this.Controls.Add(this.stopButton);
             this.Controls.Add(this.syncButton);
             this.Controls.Add(this.menuStrip);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
             this.Text = "ERPNext Connector";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
