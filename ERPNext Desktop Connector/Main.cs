@@ -10,6 +10,7 @@ namespace ERPNext_Desktop_Connector
         private bool Started = false;
         // https://docs.microsoft.com/en-us/dotnet/desktop/winforms/controls/how-to-make-thread-safe-calls-to-windows-forms-controls?view=netframeworkdesktop-4.8
         private delegate void ThreadSafeDelegate(string text);
+        private bool Exit = false;
         public Main()
         {
             InitializeComponent();
@@ -98,6 +99,37 @@ namespace ERPNext_Desktop_Connector
         private void SaveApplicationSettings(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.Save();
+        }
+
+        private void AboutMeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using(var aboutForm = new About())
+            {
+                aboutForm.ShowDialog();
+            }
+        }
+
+        private void ExitToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Exit = true;
+            Close();
+        }
+
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!Exit)
+            {
+                Hide();
+                NotifyIcon.Visible = true;
+                ShowInTaskbar = false;
+                e.Cancel = true;
+            }
+        }
+
+        private void NotifyIcon_DoubleClick(object sender, EventArgs e)
+        {
+            Show();
+            NotifyIcon.Visible = false;
         }
     }
 }
