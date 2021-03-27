@@ -156,7 +156,7 @@ namespace ERPNext_Desktop_Connector.Handlers
         {
             if (document.SalesRep == null) return;
             var salesRep = GetSalesRepEntityReference(document.SalesRep);
-            salesInvoice.SalesRepresentativeReference = salesRep;
+            salesInvoice.SalesRepresentativeReference = salesRep ?? throw new InvalidOperationException("Sales rep was not found for invoice");
         }
 
         private void AddSalesOrderData(SalesInvoice salesInvoice, string salesOrderReference, SalesOrder salesOrder,

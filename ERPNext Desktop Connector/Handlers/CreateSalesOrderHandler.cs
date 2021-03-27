@@ -123,7 +123,7 @@ namespace ERPNext_Desktop_Connector.Handlers
         {
             if (document.SalesRep == null) return;
             var salesRep = GetSalesRepEntityReference(document.SalesRep);
-            salesOrder.SalesRepresentativeReference = salesRep;
+            salesOrder.SalesRepresentativeReference = salesRep ?? throw new InvalidOperationException("No sales rep found for sales order");
         }
 
         /**
