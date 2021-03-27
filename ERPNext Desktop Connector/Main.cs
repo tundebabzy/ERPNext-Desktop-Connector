@@ -80,7 +80,13 @@ namespace ERPNext_Desktop_Connector
 
         private void SyncButton_Click(object sender, EventArgs e)
         {
-            Connector.OnStart();
+            if (Properties.Settings.Default.AutomaticSync)
+            {
+                Connector.OnStart();
+            } else
+            {
+                Connector.ManualStart();
+            }
         }
 
         private void StopButton_Click(object sender, EventArgs e)
