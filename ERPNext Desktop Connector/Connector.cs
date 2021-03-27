@@ -219,7 +219,7 @@ namespace ERPNext_Desktop_Connector
             var isAutoMode = Properties.Settings.Default.AutomaticSync;
 
             Logger.Information("Timer callback called");
-            if (!_canRequest || (isAutoMode && !IsWithinTheTimeRange(startTime, endTime)))
+            if (!_canRequest || (isAutoMode && !IsWithinTimeRange(startTime, endTime)))
             {
                 Logger.Debug("Service cannot request: {0}, {1}", _canRequest, DateTime.Now.Hour);
                 var message = _canRequest ? $"Connector is idling till {startTime.ToShortTimeString()}" : "Connector is stopped";
@@ -238,8 +238,15 @@ namespace ERPNext_Desktop_Connector
 
             if (Session != null && Session.SessionActive && Company != null)
             {
-                if (!Company.IsClosed)
+                if (!Company.IsClosed && Queue.IsEmpty)
                 {
+                    GetDocumentsThenProcessQueue();
+                }
+                else if (!Company.IsClosed)
+                {
+                    Logger.Debug("Queue is not yet empty. Queue will be reset. Consider increasing the poll interval.");
+                    Queue = new ConcurrentQueue<object>();
+                    OnConnectorInformation(EventData("New documents are available so document queue has been reset."));
                     GetDocumentsThenProcessQueue();
                 }
                 else
@@ -256,7 +263,7 @@ namespace ERPNext_Desktop_Connector
             }
         }
 
-        private bool IsWithinTheTimeRange(DateTime startTime, DateTime endTime)
+        private bool IsWithinTimeRange(DateTime startTime, DateTime endTime)
         {
             var now = DateTime.Now;
             if (now.Hour == endTime.Hour && now.Minute <= endTime.Minute)
