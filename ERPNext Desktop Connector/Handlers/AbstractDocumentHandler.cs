@@ -103,15 +103,15 @@ namespace ERPNext_Desktop_Connector.Handlers
             }
         }
 
-        protected EntityReference<Employee> GetSalesRepEntityReference(string employeeName)
+        protected EntityReference<Employee> GetSalesRepEntityReference(string employeeId)
         {
             try
             {
                 var employeeList = Company.Factories.EmployeeFactory.List();
-                var filter = GetPropertyContainsLoadModifiers("Employee.ID", employeeName);
+                var filter = GetPropertyContainsLoadModifiers("Employee.ID", employeeId);
                 employeeList.Load(filter);
 
-                var entity = employeeList.FirstOrDefault((employee => employee.Name == employeeName));
+                var entity = employeeList.FirstOrDefault((employee => employee.IsSalesRepresentative == true));
                 return entity?.Key;
             }
             catch (Exception e)
