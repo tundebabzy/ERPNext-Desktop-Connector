@@ -36,18 +36,18 @@
             this.label7 = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.EndTimePicker = new System.Windows.Forms.DateTimePicker();
             this.StartTimePicker = new System.Windows.Forms.DateTimePicker();
             this.PollingIntervalTextBox = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.TokenText = new System.Windows.Forms.TextBox();
+            this.EditButton = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.AppIdText = new System.Windows.Forms.TextBox();
             this.ServerUrlText = new System.Windows.Forms.TextBox();
             this.SecretText = new System.Windows.Forms.TextBox();
-            this.EditButton = new System.Windows.Forms.Button();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
@@ -122,6 +122,20 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Connector Options";
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = global::ERPNext_Desktop_Connector.Properties.Settings.Default.AutomaticSync;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "AutomaticSync", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.checkBox1.Location = new System.Drawing.Point(9, 132);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(153, 17);
+            this.checkBox1.TabIndex = 17;
+            this.checkBox1.Text = "Automatic Synchronizatioin";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
+            // 
             // EndTimePicker
             // 
             this.EndTimePicker.DataBindings.Add(new System.Windows.Forms.Binding("Value", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "SyncStopTime", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
@@ -179,6 +193,16 @@
             this.TokenText.TabIndex = 18;
             this.TokenText.Text = global::ERPNext_Desktop_Connector.Properties.Settings.Default.ApiToken;
             // 
+            // EditButton
+            // 
+            this.EditButton.Location = new System.Drawing.Point(126, 200);
+            this.EditButton.Name = "EditButton";
+            this.EditButton.Size = new System.Drawing.Size(75, 23);
+            this.EditButton.TabIndex = 20;
+            this.EditButton.Text = "Edit";
+            this.EditButton.UseVisualStyleBackColor = true;
+            this.EditButton.Click += new System.EventHandler(this.EditButton_Click);
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -218,30 +242,6 @@
             this.SecretText.TabIndex = 11;
             this.SecretText.Text = global::ERPNext_Desktop_Connector.Properties.Settings.Default.SecretToken;
             // 
-            // EditButton
-            // 
-            this.EditButton.Location = new System.Drawing.Point(126, 200);
-            this.EditButton.Name = "EditButton";
-            this.EditButton.Size = new System.Drawing.Size(75, 23);
-            this.EditButton.TabIndex = 20;
-            this.EditButton.Text = "Edit";
-            this.EditButton.UseVisualStyleBackColor = true;
-            this.EditButton.Click += new System.EventHandler(this.EditButton_Click);
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = global::ERPNext_Desktop_Connector.Properties.Settings.Default.AutomaticSync;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "AutomaticSync", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBox1.Location = new System.Drawing.Point(9, 132);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(153, 17);
-            this.checkBox1.TabIndex = 17;
-            this.checkBox1.Text = "Automatic Synchronizatioin";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
-            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -250,7 +250,7 @@
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Name = "SettingsForm";
-            this.Text = "SettingsForm";
+            this.Text = "Settings";
             this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
