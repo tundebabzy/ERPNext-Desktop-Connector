@@ -130,9 +130,9 @@
             this.checkBox1.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::ERPNext_Desktop_Connector.Properties.Settings.Default, "AutomaticSync", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.checkBox1.Location = new System.Drawing.Point(9, 132);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(153, 17);
+            this.checkBox1.Size = new System.Drawing.Size(151, 17);
             this.checkBox1.TabIndex = 17;
-            this.checkBox1.Text = "Automatic Synchronizatioin";
+            this.checkBox1.Text = "Automatic Synchronization";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.CheckBox1_CheckedChanged);
             // 
