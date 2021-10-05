@@ -227,7 +227,12 @@ namespace ERPNext_Desktop_Connector
             var endTime = Properties.Settings.Default.SyncStopTime;
             var isAutoMode = Properties.Settings.Default.AutomaticSync;
 
-            Logger.Information("Timer callback called");
+            Logger.Information("===========================================================");
+            Logger.Information($"Connector is ready: {_canRequest}");
+            Logger.Information($"Auto mode: {isAutoMode}");
+            Logger.Information($"Auto time range: {IsWithinTimeRange(startTime, endTime)}");
+            Logger.Information("===========================================================");
+
             if (!_canRequest || (isAutoMode && !IsWithinTimeRange(startTime, endTime)))
             {
                 Logger.Debug("Service cannot request: {0}, {1}", _canRequest, DateTime.Now.Hour);

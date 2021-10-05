@@ -4,9 +4,11 @@ namespace ERPNext_Desktop_Connector.Options
 {
     class Settings
     {
-        public const string ServerUrl = "https://dev.electrocomptr.com";
-        public const int TimerInterval = 120000;
-        public const string Version = "1.4.13-dev";
+#if DEBUG
+        public const string Version = "1.4.14-dev";
+#else
+        public const string Version = "1.4.14";
+#endif
         public static readonly StringDictionary States = new StringDictionary
         {
             { "Alabama", "AL" },
