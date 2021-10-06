@@ -363,6 +363,11 @@ namespace ERPNext_Desktop_Connector
             var url = manual ? $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_invoice.get_many_sales_invoices_for_sage?manual=1" : $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_invoice.get_sales_invoices_for_sage";
             var salesInvoiceCommand = new SalesInvoiceCommand(serverUrl: url);
             var salesInvoices = salesInvoiceCommand.Execute();
+            if (salesInvoices == null || salesInvoices.Data?.Message == null)
+            {
+                OnConnectorInformation(EventData("The server did not return data successfully"));
+                return;
+            }
             OnConnectorInformation(EventData($"ERPNext sent {salesInvoices?.Data.Message?.Count} sales invoices."));
             SendToQueue(salesInvoices.Data);
         }
@@ -372,7 +377,7 @@ namespace ERPNext_Desktop_Connector
             var url = manual ? $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_order.get_many_sales_orders_for_sage" : $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_order.get_sales_orders_for_sage";
             var salesOrderCommand = new SalesOrderCommand(serverUrl: url);
             var salesOrders = salesOrderCommand.Execute();
-            if (salesOrders == null || salesOrders.Data.Message == null)
+            if (salesOrders == null || salesOrders.Data?.Message == null)
             {
                 OnConnectorInformation(EventData("The server did not return data successfully"));
                 return;
@@ -386,7 +391,7 @@ namespace ERPNext_Desktop_Connector
             var purchaseOrderCommand = new PurchaseOrderCommand(serverUrl: $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.purchase_order.get_purchase_orders_for_sage");
             var purchaseOrders = purchaseOrderCommand.Execute();
 
-            if (purchaseOrders == null || purchaseOrders.Data.Message == null)
+            if (purchaseOrders == null || purchaseOrders?.Data?.Message == null)
             {
                 OnConnectorInformation(EventData("The server did not return data successfully"));
                 return;
