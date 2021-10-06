@@ -213,6 +213,7 @@ namespace ERPNext_Desktop_Connector
             OnConnectorStarted(EventArgs.Empty);
             Logger.Information("Timer started");
             Logger.Information("Timer interval is {0} minutes", _timer.Interval / 60000);
+            OnPeachtreeInformation(EventData($"Documents will be synchronized in {_timer.Interval / 60000} minutes"));
         }
 
         /**
@@ -246,6 +247,7 @@ namespace ERPNext_Desktop_Connector
 
         public void Sync(bool manual=false)
         {
+            OnConnectorInformation(EventData($"Synchronization in progress..."));
             if (Company == null || Company.IsClosed)
             {
                 DiscoverAndOpenCompany();
