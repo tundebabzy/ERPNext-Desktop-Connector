@@ -33,7 +33,8 @@ namespace ERPNext_Desktop_Connector.Handlers
         {
             var receiver = new CustomerCommand(name, $"{GetCustomerResourceServerAddress()}");
             var customerDocument = receiver.Execute();
-            return customerDocument.Data.Message;
+            if (customerDocument.Data?.Message == null) { }
+            return customerDocument.Data?.Message;
         }
 
         protected static SupplierDocument GetSupplierFromErpNext(string name)
