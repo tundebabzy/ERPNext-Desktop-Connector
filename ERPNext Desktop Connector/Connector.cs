@@ -244,7 +244,7 @@ namespace ERPNext_Desktop_Connector
             Sync();
         }
 
-        public void Sync()
+        public void Sync(bool manual=false)
         {
             if (Company == null || Company.IsClosed)
             {
@@ -259,14 +259,14 @@ namespace ERPNext_Desktop_Connector
             {
                 if (!Company.IsClosed && Queue.IsEmpty)
                 {
-                    GetDocumentsThenProcessQueue();
+                    GetDocumentsThenProcessQueue(manual);
                 }
                 else if (!Company.IsClosed)
                 {
                     Logger.Debug("Queue is not yet empty. Queue will be reset. Consider increasing the poll interval.");
                     Queue = new ConcurrentQueue<object>();
                     OnConnectorInformation(EventData("New documents are available so document queue has been reset."));
-                    GetDocumentsThenProcessQueue();
+                    GetDocumentsThenProcessQueue(manual);
                 }
                 else
                 {
@@ -284,7 +284,7 @@ namespace ERPNext_Desktop_Connector
 
         public Task SyncAsync()
         {
-            return Task.Run(() => Sync());
+            return Task.Run(() => Sync(true));
         }
 
         private bool IsWithinTimeRange(DateTime startTime, DateTime endTime)
@@ -309,9 +309,9 @@ namespace ERPNext_Desktop_Connector
             return false;
         }
 
-        private void GetDocumentsThenProcessQueue()
+        private void GetDocumentsThenProcessQueue(bool manual)
         {
-            GetDocuments();
+            GetDocuments(manual);
             ClearQueue();
         }
 
@@ -349,24 +349,26 @@ namespace ERPNext_Desktop_Connector
          * Pull documents from ERPNext and queue them for processing.
          * The documents pulled are Sales Orders and Purchase Orders, in that order
          */
-        private void GetDocuments()
+        private void GetDocuments(bool manual)
         {
             QueuePurchaseOrders();
-            QueueSalesOrders();
-            QueueSalesInvoices();
+            QueueSalesOrders(manual);
+            QueueSalesInvoices(manual);
         }
 
-        private void QueueSalesInvoices()
+        private void QueueSalesInvoices(bool manual)
         {
-            var salesInvoiceCommand = new SalesInvoiceCommand(serverUrl: $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_invoice.get_sales_invoices_for_sage");
+            var url = manual ? $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_invoice.get_sales_invoices_for_sage?manual=1" : $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_invoice.get_sales_invoices_for_sage";
+            var salesInvoiceCommand = new SalesInvoiceCommand(serverUrl: url);
             var salesInvoices = salesInvoiceCommand.Execute();
             OnConnectorInformation(EventData($"ERPNext sent {salesInvoices?.Data.Message?.Count} sales invoices."));
             SendToQueue(salesInvoices.Data);
         }
 
-        private void QueueSalesOrders()
+        private void QueueSalesOrders(bool manual)
         {
-            var salesOrderCommand = new SalesOrderCommand(serverUrl: $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_order.get_sales_orders_for_sage");
+            var url = manual ? $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_order.get_sales_orders_for_sage?manual=1" : $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_order.get_sales_orders_for_sage";
+            var salesOrderCommand = new SalesOrderCommand(serverUrl: url);
             var salesOrders = salesOrderCommand.Execute();
             if (salesOrders == null || salesOrders.Data.Message == null)
             {
@@ -381,7 +383,14 @@ namespace ERPNext_Desktop_Connector
         {
             var purchaseOrderCommand = new PurchaseOrderCommand(serverUrl: $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.purchase_order.get_purchase_orders_for_sage");
             var purchaseOrders = purchaseOrderCommand.Execute();
-            OnConnectorInformation(EventData($"ERPNext sent {purchaseOrders?.Data.Message?.Count} purchase orders."));
+
+            if (purchaseOrders == null || purchaseOrders.Data.Message == null)
+            {
+                OnConnectorInformation(EventData("The server did not return data successfully"));
+                return;
+            }
+            var number = purchaseOrders?.Data?.Message?.Count;
+            OnConnectorInformation(EventData($"ERPNext sent {(number == null ? 0 : number)} purchase orders."));
             SendToQueue(purchaseOrders.Data);
         }
 
