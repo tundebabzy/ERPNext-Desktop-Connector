@@ -360,7 +360,7 @@ namespace ERPNext_Desktop_Connector
 
         private void QueueSalesInvoices(bool manual)
         {
-            var url = manual ? $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_invoice.get_sales_invoices_for_sage?manual=1" : $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_invoice.get_sales_invoices_for_sage";
+            var url = manual ? $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_invoice.get_many_sales_invoices_for_sage?manual=1" : $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_invoice.get_sales_invoices_for_sage";
             var salesInvoiceCommand = new SalesInvoiceCommand(serverUrl: url);
             var salesInvoices = salesInvoiceCommand.Execute();
             OnConnectorInformation(EventData($"ERPNext sent {salesInvoices?.Data.Message?.Count} sales invoices."));
@@ -369,7 +369,7 @@ namespace ERPNext_Desktop_Connector
 
         private void QueueSalesOrders(bool manual)
         {
-            var url = manual ? $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_order.get_sales_orders_for_sage?manual=1" : $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_order.get_sales_orders_for_sage";
+            var url = manual ? $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_order.get_many_sales_orders_for_sage" : $"{Properties.Settings.Default.ServerAddress}/api/method/electro_erpnext.utilities.sales_order.get_sales_orders_for_sage";
             var salesOrderCommand = new SalesOrderCommand(serverUrl: url);
             var salesOrders = salesOrderCommand.Execute();
             if (salesOrders == null || salesOrders.Data.Message == null)
