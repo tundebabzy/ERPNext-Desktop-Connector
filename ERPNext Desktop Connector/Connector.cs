@@ -16,6 +16,7 @@ namespace ERPNext_Desktop_Connector
     {
         private const string CompanyName = "Electro-Comp Tape & Reel Services, LLC";
         private string ApplicationId = Properties.Settings.Default.ApplicationId;
+        private string CompanyFile = Properties.Settings.Default.File;
         private bool _canRequest = true;
         private Timer _timer;
         private ILogger Logger { get; set; }
@@ -319,7 +320,7 @@ namespace ERPNext_Desktop_Connector
 
         private CompanyIdentifier DiscoverCompany()
         {
-            bool Predicate(CompanyIdentifier c) { return c.CompanyName == CompanyName; }
+            bool Predicate(CompanyIdentifier c) { return string.IsNullOrEmpty(c.Path) ? c.CompanyName == CompanyName: c.Path == CompanyFile.ToLower(); }
             try
             {
                 var companies = Session.CompanyList();
@@ -368,7 +369,7 @@ namespace ERPNext_Desktop_Connector
                 OnConnectorInformation(EventData("The server did not return data successfully"));
                 return;
             }
-            OnConnectorInformation(EventData($"ERPNext sent {salesInvoices?.Data.Message?.Count} sales invoices."));
+            OnConnectorInformation(EventData($"ERPNext sent {salesInvoices?.Data?.Message?.Count} sales invoices."));
             SendToQueue(salesInvoices.Data);
         }
 
