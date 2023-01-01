@@ -7,6 +7,8 @@ using Sage.Peachtree.API;
 using Serilog;
 using System;
 using System.Collections.Concurrent;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -192,6 +194,7 @@ namespace ERPNext_Desktop_Connector
         private void ClearQueue()
         {
             Logger.Information("Version {@Version}", Settings.Version);
+            Logger.Information("Now attempting to treat queued documents");
             if (Queue.IsEmpty || Company == null || Company.IsClosed) return;
             var handler = new DocumentTypeHandler(Company, Logger);
             while (Queue.TryDequeue(out var document) && Session.SessionActive)
@@ -320,7 +323,7 @@ namespace ERPNext_Desktop_Connector
 
         private CompanyIdentifier DiscoverCompany()
         {
-            bool Predicate(CompanyIdentifier c) { return string.IsNullOrEmpty(c.Path) ? c.CompanyName == CompanyName: c.Path == CompanyFile.ToLower(); }
+            bool Predicate(CompanyIdentifier c) { return string.IsNullOrEmpty(CompanyFile) ? c.CompanyName.ToLower() == CompanyName.ToLower() : c.Path == CompanyFile.ToLower(); }
             try
             {
                 var companies = Session.CompanyList();
@@ -354,8 +357,20 @@ namespace ERPNext_Desktop_Connector
          */
         private void GetDocuments(bool manual)
         {
+            if (!IsConnectedToInternet())
+            {
+                Logger.Information("It seems this computer is not connected to the internet");
+                OnPeachtreeInformation(EventData("It seems this computer is not connected to the internet"));
+            } else
+            {
+                Logger.Information("It seems this computer is connected to the internet");
+                OnPeachtreeInformation(EventData("Internet seems to be ok..."));
+            }
+            Logger.Information("Attempting to retrieve purchase order data from ERP");
             QueuePurchaseOrders();
+            Logger.Information("Attempting to retrieve sales order data from ERP");
             QueueSalesOrders(manual);
+            Logger.Information("Attempting to retrieve sales invoice data from ERP");
             QueueSalesInvoices(manual);
         }
 
@@ -480,6 +495,22 @@ namespace ERPNext_Desktop_Connector
         {
             var eventHandler = LoggedInStateChange;
             eventHandler?.Invoke(this, e);
+        }
+
+        // copied from https://www.c-sharpcorner.com/uploadfile/nipuntomar/check-internet-connection/
+        public bool IsConnectedToInternet()
+        {
+            string host = "google.com";
+            bool result = false;
+            Ping p = new Ping();
+            try
+            {
+                PingReply reply = p.Send(host, 3000);
+                if (reply.Status == IPStatus.Success)
+                    return true;
+            }
+            catch { }
+            return result;
         }
     }
 }
