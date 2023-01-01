@@ -7,6 +7,8 @@ using Sage.Peachtree.API;
 using Serilog;
 using System;
 using System.Collections.Concurrent;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -16,6 +18,7 @@ namespace ERPNext_Desktop_Connector
     {
         private const string CompanyName = "Electro-Comp Tape & Reel Services, LLC";
         private string ApplicationId = Properties.Settings.Default.ApplicationId;
+        private string CompanyFile = Properties.Settings.Default.File;
         private bool _canRequest = true;
         private Timer _timer;
         private ILogger Logger { get; set; }
@@ -191,6 +194,7 @@ namespace ERPNext_Desktop_Connector
         private void ClearQueue()
         {
             Logger.Information("Version {@Version}", Settings.Version);
+            Logger.Information("Now attempting to treat queued documents");
             if (Queue.IsEmpty || Company == null || Company.IsClosed) return;
             var handler = new DocumentTypeHandler(Company, Logger);
             while (Queue.TryDequeue(out var document) && Session.SessionActive)
@@ -319,7 +323,7 @@ namespace ERPNext_Desktop_Connector
 
         private CompanyIdentifier DiscoverCompany()
         {
-            bool Predicate(CompanyIdentifier c) { return c.CompanyName == CompanyName; }
+            bool Predicate(CompanyIdentifier c) { return string.IsNullOrEmpty(CompanyFile) ? c.CompanyName.ToLower() == CompanyName.ToLower() : c.Path == CompanyFile.ToLower(); }
             try
             {
                 var companies = Session.CompanyList();
@@ -353,8 +357,20 @@ namespace ERPNext_Desktop_Connector
          */
         private void GetDocuments(bool manual)
         {
+            if (!IsConnectedToInternet())
+            {
+                Logger.Information("It seems this computer is not connected to the internet");
+                OnLoggedInStateChanged(EventData("Logged in but this computer might not connected to the internet"));
+            } else
+            {
+                Logger.Information("It seems this computer is connected to the internet");
+                OnPeachtreeInformation(EventData("Internet seems to be ok..."));
+            }
+            Logger.Information("Attempting to retrieve purchase order data from ERP");
             QueuePurchaseOrders();
+            Logger.Information("Attempting to retrieve sales order data from ERP");
             QueueSalesOrders(manual);
+            Logger.Information("Attempting to retrieve sales invoice data from ERP");
             QueueSalesInvoices(manual);
         }
 
@@ -368,7 +384,7 @@ namespace ERPNext_Desktop_Connector
                 OnConnectorInformation(EventData("The server did not return data successfully"));
                 return;
             }
-            OnConnectorInformation(EventData($"ERPNext sent {salesInvoices?.Data.Message?.Count} sales invoices."));
+            OnConnectorInformation(EventData($"ERPNext sent {salesInvoices?.Data?.Message?.Count} sales invoices."));
             SendToQueue(salesInvoices.Data);
         }
 
@@ -479,6 +495,23 @@ namespace ERPNext_Desktop_Connector
         {
             var eventHandler = LoggedInStateChange;
             eventHandler?.Invoke(this, e);
+        }
+
+        // copied from https://www.c-sharpcorner.com/uploadfile/nipuntomar/check-internet-connection/
+        public bool IsConnectedToInternet()
+        {
+            string host = "google.com";
+            bool result = false;
+            Ping p = new Ping();
+            try
+            {
+                PingReply reply = p.Send(host, 3000);
+                if (reply.Status == IPStatus.Success)
+                    return true;
+                Logger.Debug($"Status returned from ping was {reply.Status}");
+            }
+            catch { }
+            return result;
         }
     }
 }
