@@ -360,7 +360,7 @@ namespace ERPNext_Desktop_Connector
             if (!IsConnectedToInternet())
             {
                 Logger.Information("It seems this computer is not connected to the internet");
-                OnPeachtreeInformation(EventData("It seems this computer is not connected to the internet"));
+                OnLoggedInStateChanged(EventData("Logged in but this computer might not connected to the internet"));
             } else
             {
                 Logger.Information("It seems this computer is connected to the internet");
@@ -508,6 +508,7 @@ namespace ERPNext_Desktop_Connector
                 PingReply reply = p.Send(host, 3000);
                 if (reply.Status == IPStatus.Success)
                     return true;
+                Logger.Debug($"Status returned from ping was {reply.Status}");
             }
             catch { }
             return result;
