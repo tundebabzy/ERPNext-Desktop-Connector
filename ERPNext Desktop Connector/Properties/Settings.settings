@@ -24,10 +24,13 @@
       <Value Profile="(Default)">https://dev.electrocomptr.com</Value>
     </Setting>
     <Setting Name="ApiToken" Type="System.String" Scope="User">
-      <Value Profile="(Default)">4e7b90c8fc265ac</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SecretToken" Type="System.String" Scope="User">
       <Value Profile="(Default)">78e5615db2830e3</Value>
     </Setting>
+	<Setting Name="File" Type="System.String" Scope="User">
+	  <Value Profile="(Default)"></Value>
+	</Setting>
   </Settings>
 </SettingsFile>

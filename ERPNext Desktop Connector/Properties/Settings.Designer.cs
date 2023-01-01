@@ -12,7 +12,7 @@ namespace ERPNext_Desktop_Connector.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.5.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -109,7 +109,7 @@ namespace ERPNext_Desktop_Connector.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("4e7b90c8fc265ac")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ApiToken {
             get {
                 return ((string)(this["ApiToken"]));
@@ -128,6 +128,18 @@ namespace ERPNext_Desktop_Connector.Properties {
             }
             set {
                 this["SecretToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string File {
+            get {
+                return ((string)(this["File"]));
+            }
+            set {
+                this["File"] = value;
             }
         }
     }
