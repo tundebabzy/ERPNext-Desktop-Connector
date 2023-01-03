@@ -152,10 +152,11 @@ namespace ERPNext_Desktop_Connector.Handlers
                 }
 
                 var item = LoadInventoryItem(itemReference);
+                var price = Decimal.Divide(line.Amount, line.Qty);
                 _.AccountReference = GetSalesAccountReference(item);
                 _.Quantity = line.Qty;
                 _.Description = GetLineDescription(line);
-                _.UnitPrice = Decimal.Divide(line.Amount, line.Qty);    // _.CalculateUnitCost(_.Quantity, _.Amount);
+                _.UnitPrice = Math.Round(price, 2) > new Decimal(0.00) ? price : new Decimal(0);    // _.CalculateUnitCost(_.Quantity, _.Amount);
                 _.Amount = _.CalculateAmount(_.Quantity, _.UnitPrice);
                 _.InventoryItemReference = itemReference;
             }
