@@ -5,9 +5,9 @@ namespace ERPNext_Desktop_Connector.Options
     class Settings
     {
 #if DEBUG
-        public const string Version = "1.5.1-dev";
+        public const string Version = "1.5.2-dev";
 #else
-        public const string Version = "1.5.1";
+        public const string Version = "1.5.2";
 #endif
         public static readonly StringDictionary States = new StringDictionary
         {
